@@ -1,0 +1,94 @@
+name: Reusable private Renovate
+
+on:
+  workflow_call:
+    inputs:
+      repository:
+        description: Repository to process. Defaults to the caller repository.
+        required: false
+        type: string
+        default: ""
+      renovate-version:
+        description: Renovate Docker image tag.
+        required: false
+        type: string
+        default: "43"
+      branch-prefix:
+        description: Branch prefix for this self-hosted Renovate runner.
+        required: false
+        type: string
+        default: "self-hosted-renovate/"
+      require-config:
+        description: Renovate requireConfig value.
+        required: false
+        type: string
+        default: "required"
+      onboarding:
+        description: Whether Renovate may create onboarding PRs.
+        required: false
+        type: boolean
+        default: false
+      git-author:
+        description: Git author used by Renovate commits.
+        required: false
+        type: string
+        default: "Renovate Bot <renovate@example.invalid>"
+      log-level:
+        description: Renovate log level.
+        required: false
+        type: string
+        default: "info"
+    secrets:
+      RENOVATE_TOKEN:
+        description: GitHub PAT or installation token used by Renovate.
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write Renovate global config
+        id: config
+        env:
+          INPUT_REPOSITORY: ${{ inputs.repository }}
+          INPUT_BRANCH_PREFIX: ${{ inputs.branch-prefix }}
+          INPUT_REQUIRE_CONFIG: ${{ inputs.require-config }}
+          INPUT_ONBOARDING: ${{ inputs.onboarding }}
+          INPUT_GIT_AUTHOR: ${{ inputs.git-author }}
+        run: |
+          set -eu
+
+          repository="$INPUT_REPOSITORY"
+          if [ -z "$repository" ]; then
+            repository="$GITHUB_REPOSITORY"
+          fi
+
+          config_path="$GITHUB_WORKSPACE/renovate-global.json"
+          jq -n \
+            --arg repository "$repository" \
+            --arg branchPrefix "$INPUT_BRANCH_PREFIX" \
+            --arg requireConfig "$INPUT_REQUIRE_CONFIG" \
+            --arg gitAuthor "$INPUT_GIT_AUTHOR" \
+            --argjson onboarding "$INPUT_ONBOARDING" \
+            '{
+              platform: "github",
+              onboarding: $onboarding,
+              requireConfig: $requireConfig,
+              branchPrefix: $branchPrefix,
+              gitAuthor: $gitAuthor,
+              repositories: [$repository]
+            }' > "$config_path"
+
+          echo "path=$config_path" >> "$GITHUB_OUTPUT"
+
+      - name: Run Renovate
+        uses: renovatebot/github-action@v46.1.13
+        with:
+          configurationFile: ${{ steps.config.outputs.path }}
+          renovate-version: ${{ inputs.renovate-version }}
+          token: ${{ secrets.RENOVATE_TOKEN }}
+        env:
+          LOG_LEVEL: ${{ inputs.log-level }}

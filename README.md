@@ -9,6 +9,7 @@ Reusable GitHub Actions workflows for kitsuyui repositories.
 - `gitignore-in.yml`: runs `gitignore-in/gh-action`.
 - `actionlint.yml`: runs `rhysd/actionlint` against the caller repository.
 - `gh-counter.yml`: runs `kitsuyui/gh-counter` and uploads its generated files.
+- `private-renovate.yml`: runs self-hosted Renovate for private repositories.
 
 Caller repositories should keep only small workflow files that define the trigger,
 permissions, and `jobs.<job_id>.uses` reference. The reusable workflows run in the
@@ -52,3 +53,24 @@ jobs:
       files: ".github/workflows/*.yml"
       shellcheck: disabled
 ```
+
+Private Renovate callers should provide a repository secret named
+`RENOVATE_TOKEN`. The workflow processes the caller repository by default:
+
+```yaml
+name: Renovate
+on:
+  schedule:
+    - cron: "0 23 * * 5"
+  workflow_dispatch:
+jobs:
+  renovate:
+    uses: kitsuyui/gh-actions-workflows/.github/workflows/private-renovate.yml@main
+    secrets:
+      RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
+```
+
+The reusable workflow uses the `self-hosted-renovate/` branch prefix by default
+so that it can run alongside hosted Renovate during migration.
+Private callers should pin this reusable workflow to a tag or commit SHA after a
+release because they pass a Renovate credential to the called workflow.
