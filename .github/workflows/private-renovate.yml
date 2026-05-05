@@ -32,7 +32,7 @@ on:
         description: Git author used by Renovate commits.
         required: false
         type: string
-        default: "Renovate Bot <renovate@example.invalid>"
+        default: "kitsuyui <kitsuyui@kitsuyui.com>"
       log-level:
         description: Renovate log level.
         required: false
