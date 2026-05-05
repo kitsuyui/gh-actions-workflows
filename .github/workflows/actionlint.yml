@@ -1,0 +1,45 @@
+name: Reusable actionlint
+
+on:
+  workflow_call:
+    inputs:
+      files:
+        description: Files or globs passed to actionlint.
+        required: false
+        type: string
+        default: ".github/workflows/*.yml"
+      actionlint-version:
+        description: actionlint version tag.
+        required: false
+        type: string
+        default: "v1.7.12"
+      shellcheck:
+        description: Set to disabled to run actionlint with -shellcheck=.
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    name: Actionlint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: stable
+
+      - name: Run actionlint
+        run: |
+          set -eu
+          shellcheck_arg=""
+          if [ "${{ inputs.shellcheck }}" = "disabled" ]; then
+            shellcheck_arg="-shellcheck="
+          fi
+          go run github.com/rhysd/actionlint/cmd/actionlint@${{ inputs.actionlint-version }} $shellcheck_arg ${{ inputs.files }}
