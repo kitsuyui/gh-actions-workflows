@@ -1,0 +1,45 @@
+name: Reusable gh-counter
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: Artifact name for gh-counter output.
+        required: false
+        type: string
+        default: "gh-counter-output"
+      artifact-path:
+        description: Artifact path for gh-counter output.
+        required: false
+        type: string
+        default: ".gh-counter"
+      retention-days:
+        description: Artifact retention days.
+        required: false
+        type: number
+        default: 30
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  gh-counter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Run gh-counter
+        uses: kitsuyui/gh-counter@v1.2
+        with:
+          github-token: ${{ github.token }}
+
+      - name: Upload gh-counter output
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ${{ inputs.artifact-path }}
+          include-hidden-files: true
+          retention-days: ${{ inputs.retention-days }}
