@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    uses: kitsuyui/gh-actions-workflows/.github/workflows/actionlint.yml@main
+
+  spellcheck:
+    uses: kitsuyui/gh-actions-workflows/.github/workflows/spellcheck.yml@main
