@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   actionlint:
-    uses: kitsuyui/gh-actions-workflows/.github/workflows/actionlint.yml@b48db82eb82c1f469430bb981812e58aca61d5b5 # main
+    uses: kitsuyui/gh-actions-workflows/.github/workflows/actionlint.yml@13bcb6950cf9b54297b7e8f88823dcd2c45426b2 # main
 
   spellcheck:
-    uses: kitsuyui/gh-actions-workflows/.github/workflows/spellcheck.yml@b48db82eb82c1f469430bb981812e58aca61d5b5 # main
+    uses: kitsuyui/gh-actions-workflows/.github/workflows/spellcheck.yml@13bcb6950cf9b54297b7e8f88823dcd2c45426b2 # main
