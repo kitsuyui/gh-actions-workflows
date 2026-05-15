@@ -36,10 +36,31 @@ jobs:
           go-version: stable
 
       - name: Run actionlint
+        env:
+          ACTIONLINT_FILES: ${{ inputs.files }}
+          ACTIONLINT_SHELLCHECK: ${{ inputs.shellcheck }}
+          ACTIONLINT_VERSION: ${{ inputs.actionlint-version }}
         run: |
           set -eu
-          shellcheck_arg=""
-          if [ "${{ inputs.shellcheck }}" = "disabled" ]; then
-            shellcheck_arg="-shellcheck="
+
+          if ! printf '%s' "$ACTIONLINT_VERSION" | grep -Eq '^v[0-9]+[.][0-9]+[.][0-9]+(-[0-9A-Za-z.-]+)?$'; then
+            echo "::error::actionlint-version must be an actionlint release tag like v1.7.12"
+            exit 2
           fi
-          go run github.com/rhysd/actionlint/cmd/actionlint@${{ inputs.actionlint-version }} $shellcheck_arg ${{ inputs.files }}
+
+          shellcheck_arg=()
+          case "$ACTIONLINT_SHELLCHECK" in
+            "")
+              ;;
+            "disabled")
+              shellcheck_arg=(-shellcheck=)
+              ;;
+            *)
+              echo "::error::shellcheck must be empty or disabled"
+              exit 2
+              ;;
+          esac
+
+          # ACTIONLINT_FILES is intentionally unquoted so existing caller globs keep expanding.
+          # shellcheck disable=SC2086
+          go run "github.com/rhysd/actionlint/cmd/actionlint@$ACTIONLINT_VERSION" "${shellcheck_arg[@]}" -- $ACTIONLINT_FILES
