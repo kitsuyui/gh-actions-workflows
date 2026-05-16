@@ -11,7 +11,11 @@ permissions:
 
 jobs:
   actionlint:
-    uses: kitsuyui/gh-actions-workflows/.github/workflows/actionlint.yml@0a08147f81785440c9bbae04144f53ceb7ed81f7 # main
+    # Keep this repository dogfooding the reusable workflow at the same commit.
+    # A pinned self-reference creates a Renovate digest update loop after every merge.
+    uses: ./.github/workflows/actionlint.yml
 
   spellcheck:
-    uses: kitsuyui/gh-actions-workflows/.github/workflows/spellcheck.yml@0a08147f81785440c9bbae04144f53ceb7ed81f7 # main
+    # Keep this repository dogfooding the reusable workflow at the same commit.
+    # A pinned self-reference creates a Renovate digest update loop after every merge.
+    uses: ./.github/workflows/spellcheck.yml
