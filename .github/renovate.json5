@@ -2,5 +2,17 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "github>kitsuyui/renovate-config"
+  ],
+  "packageRules": [
+    {
+      "description": "Avoid self-referential digest update loops for this reusable workflow repository.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "kitsuyui/gh-actions-workflows"
+      ],
+      "enabled": false
+    }
   ]
 }
