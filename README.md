@@ -54,6 +54,9 @@ jobs:
       shellcheck: disabled
 ```
 
+When overriding `actionlint-version`, pass an actionlint release tag such as
+`v1.7.12`. The workflow validates the tag format before invoking `go run`.
+
 Private Renovate callers should provide a repository secret named
 `RENOVATE_TOKEN`. The workflow processes the caller repository by default:
 
