@@ -60,6 +60,7 @@ jobs:
           INPUT_GIT_AUTHOR: ${{ inputs.git-author }}
         run: |
           set -eu
+          set -o pipefail
 
           repository="$INPUT_REPOSITORY"
           if [ -z "$repository" ]; then
