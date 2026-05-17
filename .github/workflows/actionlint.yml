@@ -14,10 +14,15 @@ on:
         type: string
         default: "v1.7.12"
       shellcheck:
-        description: Set to disabled to run actionlint with -shellcheck=.
+        description: Legacy compatibility input. Set to disabled to run actionlint with -shellcheck=.
         required: false
         type: string
         default: ""
+      shellcheck-enabled:
+        description: Run ShellCheck when actionlint checks shell scripts.
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -39,6 +44,7 @@ jobs:
         env:
           ACTIONLINT_FILES: ${{ inputs.files }}
           ACTIONLINT_SHELLCHECK: ${{ inputs.shellcheck }}
+          ACTIONLINT_SHELLCHECK_ENABLED: ${{ inputs.shellcheck-enabled }}
           ACTIONLINT_VERSION: ${{ inputs.actionlint-version }}
         run: |
           set -eu
@@ -52,12 +58,24 @@ jobs:
           shellcheck_arg=()
           case "$ACTIONLINT_SHELLCHECK" in
             "")
+              case "$ACTIONLINT_SHELLCHECK_ENABLED" in
+                "true")
+                  ;;
+                "false")
+                  shellcheck_arg=(-shellcheck=)
+                  ;;
+                *)
+                  echo "::error::shellcheck-enabled must be true or false"
+                  exit 2
+                  ;;
+              esac
               ;;
             "disabled")
+              echo "::warning::shellcheck: disabled is deprecated; use shellcheck-enabled: false"
               shellcheck_arg=(-shellcheck=)
               ;;
             *)
-              echo "::error::shellcheck must be empty or disabled"
+              echo "::error::shellcheck must be empty or disabled; use shellcheck-enabled: false to disable ShellCheck"
               exit 2
               ;;
           esac
