@@ -68,6 +68,12 @@ jobs:
           fi
 
           config_path="$GITHUB_WORKSPACE/renovate-global.json"
+          config_tmp="$(mktemp "$GITHUB_WORKSPACE/renovate-global.XXXXXX.json")"
+          cleanup() {
+            rm -f "$config_tmp"
+          }
+          trap cleanup EXIT
+
           jq -n \
             --arg repository "$repository" \
             --arg branchPrefix "$INPUT_BRANCH_PREFIX" \
@@ -81,7 +87,11 @@ jobs:
               branchPrefix: $branchPrefix,
               gitAuthor: $gitAuthor,
               repositories: [$repository]
-            }' > "$config_path"
+            }' > "$config_tmp"
+
+          jq -e . "$config_tmp" > /dev/null
+          mv "$config_tmp" "$config_path"
+          trap - EXIT
 
           echo "path=$config_path" >> "$GITHUB_OUTPUT"
 
