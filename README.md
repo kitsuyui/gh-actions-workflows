@@ -51,11 +51,13 @@ jobs:
     uses: kitsuyui/gh-actions-workflows/.github/workflows/actionlint.yml@main
     with:
       files: ".github/workflows/*.yml"
-      shellcheck: disabled
+      shellcheck-enabled: false
 ```
 
 When overriding `actionlint-version`, pass an actionlint release tag such as
 `v1.7.12`. The workflow validates the tag format before invoking `go run`.
+The legacy `shellcheck: disabled` input is still accepted for compatibility, but
+new callers should prefer `shellcheck-enabled: false`.
 
 Private Renovate callers should provide a repository secret named
 `RENOVATE_TOKEN`. The workflow processes the caller repository by default:
