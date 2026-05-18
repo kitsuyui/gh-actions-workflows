@@ -23,6 +23,10 @@ permissions:
   contents: write
   pull-requests: write
 
+concurrency:
+  group: gh-counter-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   gh-counter:
     runs-on: ubuntu-latest
