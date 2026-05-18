@@ -15,6 +15,11 @@ Caller repositories should keep only small workflow files that define the trigge
 permissions, and `jobs.<job_id>.uses` reference. The reusable workflows run in the
 caller repository context after `actions/checkout`.
 
+Reusable workflows that write repository contents or pull requests are serialized
+by this repository's workflow definitions. Caller workflows should also keep a
+matching `concurrency` group when they define multiple triggers for the same
+write operation, so queued runs stay explicit in the caller repository.
+
 ## Caller examples
 
 ```yaml
@@ -68,6 +73,9 @@ on:
   schedule:
     - cron: "0 23 * * 5"
   workflow_dispatch:
+concurrency:
+  group: private-renovate-${{ github.repository }}
+  cancel-in-progress: false
 jobs:
   renovate:
     uses: kitsuyui/gh-actions-workflows/.github/workflows/private-renovate.yml@main

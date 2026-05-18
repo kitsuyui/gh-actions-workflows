@@ -46,6 +46,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: private-renovate-${{ github.repository }}-${{ inputs.repository || github.repository }}
+  cancel-in-progress: false
+
 jobs:
   renovate:
     runs-on: ubuntu-latest
