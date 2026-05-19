@@ -85,5 +85,26 @@ jobs:
 
 The reusable workflow uses the `self-hosted-renovate/` branch prefix by default
 so that it can run alongside hosted Renovate during migration.
-Private callers should pin this reusable workflow to a tag or commit SHA after a
-release because they pass a Renovate credential to the called workflow.
+Private callers should pin this reusable workflow to a tag or commit SHA because
+they pass a Renovate credential to the called workflow.
+
+## Releases
+
+Releases are created by triggering the `release.yml` workflow via
+`Actions → Release → Run workflow` with a version tag such as `v1.0.0`.
+The workflow validates the semver format and creates a GitHub release with
+auto-generated release notes.
+
+Callers that want to avoid automatic breakage on every push to `main` — such as
+private Renovate callers that pass a credential — should pin to a release tag:
+
+```yaml
+jobs:
+  renovate:
+    uses: kitsuyui/gh-actions-workflows/.github/workflows/private-renovate.yml@v1.0.0
+    secrets:
+      RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
+```
+
+Other callers may continue to reference `@main` if they prefer to track the
+latest workflows without explicit pinning.
