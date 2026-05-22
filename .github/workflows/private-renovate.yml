@@ -12,7 +12,7 @@ on:
         description: Renovate Docker image tag.
         required: false
         type: string
-        default: "43"
+        default: "43.192.0"
       branch-prefix:
         description: Branch prefix for this self-hosted Renovate runner.
         required: false
