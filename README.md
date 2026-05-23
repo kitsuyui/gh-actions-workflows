@@ -5,7 +5,11 @@ Reusable GitHub Actions workflows for kitsuyui repositories.
 ## Workflows
 
 - `spellcheck.yml`: runs `crate-ci/typos` against the caller repository.
-- `happy-commit.yml`: runs `kitsuyui/happy-commit`.
+- `happy-commit.yml`: runs `kitsuyui/happy-commit`. The `happy` job uses
+  `continue-on-error: true` by design — a failure (e.g. token scope, API
+  rate-limit) does not block the caller's CI and is not observable via
+  `needs.<job>.result`. This is intentional because happy-commit is a
+  decorative step.
 - `gitignore-in.yml`: runs `gitignore-in/gh-action`.
 - `actionlint.yml`: runs `rhysd/actionlint` against the caller repository.
 - `gh-counter.yml`: runs `kitsuyui/gh-counter` and uploads its generated files.
