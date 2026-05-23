@@ -53,6 +53,7 @@ concurrency:
 jobs:
   renovate:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - name: Write Renovate global config
         id: config

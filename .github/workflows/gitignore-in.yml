@@ -14,5 +14,6 @@ concurrency:
 jobs:
   update-gitignore:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: gitignore-in/gh-action@98ab8a7225c88b81167bfef156dbad83c554aaf4 # v0.2.3

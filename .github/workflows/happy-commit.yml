@@ -11,6 +11,7 @@ permissions:
 jobs:
   happy:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     name: happy
     continue-on-error: true
     steps:
