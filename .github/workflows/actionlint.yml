@@ -4,7 +4,10 @@ on:
   workflow_call:
     inputs:
       files:
-        description: Files or globs passed to actionlint.
+        description: >-
+          Shell glob pattern(s) passed to actionlint. The value is word-split
+          and glob-expanded by the shell, so multiple patterns can be separated
+          by spaces. Paths containing spaces are not supported.
         required: false
         type: string
         default: ".github/workflows/*.yml"
