@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     name: happy
+    # continue-on-error is intentional: happy-commit adds decorative comments
+    # and reactions, so a failure (e.g. token scope, API rate-limit) should
+    # not block the caller's CI. Callers cannot observe this job's failure
+    # via needs.<job>.result.
     continue-on-error: true
     steps:
       - uses: kitsuyui/happy-commit@b8724714862e1b643122b8f233b3aaca26b9825d # v0.9
