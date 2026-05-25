@@ -71,6 +71,21 @@ before invoking `go run`.
 The legacy `shellcheck: disabled` input is still accepted for compatibility, but
 new callers should prefer `shellcheck-enabled: false`.
 
+Gh-counter callers can override the checkout history depth:
+
+```yaml
+jobs:
+  gh-counter:
+    uses: kitsuyui/gh-actions-workflows/.github/workflows/gh-counter.yml@main
+    with:
+      checkout-fetch-depth: 100
+```
+
+The default remains `0` because gh-counter compares pull requests against the
+base branch and may need full history to resolve a merge-base. Repositories with
+large histories can set a bounded depth to reduce checkout cost, but too shallow
+a checkout can make gh-counter fail to find the pull request base commit.
+
 Private Renovate callers should provide a repository secret named
 `RENOVATE_TOKEN`. The workflow processes the caller repository by default:
 

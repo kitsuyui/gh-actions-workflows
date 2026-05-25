@@ -18,6 +18,11 @@ on:
         required: false
         type: number
         default: 30
+      checkout-fetch-depth:
+        description: Number of commits to fetch before running gh-counter. Use 0 for full history.
+        required: false
+        type: number
+        default: 0
 
 permissions:
   contents: write
@@ -34,7 +39,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
-          fetch-depth: 0
+          fetch-depth: ${{ inputs.checkout-fetch-depth }}
           persist-credentials: false
 
       - name: Run gh-counter
