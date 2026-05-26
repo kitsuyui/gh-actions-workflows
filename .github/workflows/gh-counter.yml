@@ -14,7 +14,7 @@ on:
         type: string
         default: ".gh-counter"
       retention-days:
-        description: Artifact retention days.
+        description: Artifact retention days. Must be an integer from 1 through 90.
         required: false
         type: number
         default: 30
@@ -46,6 +46,18 @@ jobs:
         uses: kitsuyui/gh-counter@10a1b88b49e94d920846facf0f6143b087160e2c # v1.5
         with:
           github-token: ${{ github.token }}
+
+      - name: Validate retention-days
+        env:
+          RETENTION_DAYS: ${{ inputs.retention-days }}
+        run: |
+          set -eu
+          set -o pipefail
+
+          if [[ ! "$RETENTION_DAYS" =~ ^([1-9]|[1-8][0-9]|90)$ ]]; then
+            echo "::error::retention-days must be an integer from 1 through 90"
+            exit 2
+          fi
 
       - name: Upload gh-counter output
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7

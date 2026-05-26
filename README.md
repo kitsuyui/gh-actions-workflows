@@ -79,12 +79,15 @@ jobs:
     uses: kitsuyui/gh-actions-workflows/.github/workflows/gh-counter.yml@main
     with:
       checkout-fetch-depth: 100
+      retention-days: 14
 ```
 
 The default remains `0` because gh-counter compares pull requests against the
 base branch and may need full history to resolve a merge-base. Repositories with
 large histories can set a bounded depth to reduce checkout cost, but too shallow
 a checkout can make gh-counter fail to find the pull request base commit.
+When overriding artifact retention, pass `retention-days` as an integer from 1
+through 90 so the value matches GitHub artifact retention limits.
 
 Private Renovate callers should provide a repository secret named
 `RENOVATE_TOKEN`. The workflow processes the caller repository by default:
