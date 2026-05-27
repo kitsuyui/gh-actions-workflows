@@ -54,3 +54,4 @@ jobs:
           path: ${{ inputs.artifact-path }}
           include-hidden-files: true
           retention-days: ${{ inputs.retention-days }}
+          if-no-files-found: warn
