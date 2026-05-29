@@ -117,8 +117,19 @@ Releases are created by triggering the `release.yml` workflow via
 The workflow validates the semver format and creates a GitHub release with
 auto-generated release notes.
 
-Callers that want to avoid automatic breakage on every push to `main` — such as
-private Renovate callers that pass a credential — should pin to a release tag:
+No releases have been published yet. Until the first release tag is available,
+callers that pass credentials or otherwise need a reproducible reference can
+pin to a commit SHA:
+
+```yaml
+jobs:
+  renovate:
+    uses: kitsuyui/gh-actions-workflows/.github/workflows/private-renovate.yml@f71e3c9057b11b8f5308003068ed64c8da3ed8a9
+    secrets:
+      RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
+```
+
+Once a release is published, callers should prefer pinning to a release tag:
 
 ```yaml
 jobs:
