@@ -14,5 +14,17 @@
       ],
       "enabled": false
     }
+  ],
+  "customManagers": [
+    {
+      "description": "Track actionlint version embedded in workflow_call input default.",
+      "customType": "regex",
+      "fileMatch": ["\\.github/workflows/actionlint\\.yml$"],
+      "matchStrings": [
+        "actionlint-version:[\\s\\S]*?default: \"(?<currentValue>v[0-9]+\\.[0-9]+\\.[0-9]+)\""
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "rhysd/actionlint"
+    }
   ]
 }
