@@ -110,6 +110,18 @@ so that it can run alongside hosted Renovate during migration.
 Private callers should pin this reusable workflow to a tag or commit SHA because
 they pass a Renovate credential to the called workflow.
 
+`RENOVATE_TOKEN` minimum required permissions depend on the token type:
+
+| Token type | Required scopes / permissions |
+| --- | --- |
+| Classic PAT | `repo` for private repositories; `public_repo` for public-only |
+| Fine-grained PAT | `Contents: Read and write`, `Pull requests: Read and write`, `Metadata: Read-only` |
+| GitHub App installation token | Same permissions as a fine-grained PAT above |
+
+Because the `repository` input lets callers target any repository, scope the
+token to only the repositories that Renovate should manage to limit blast radius
+if the token is compromised.
+
 ## Releases
 
 Releases are created by triggering the `release.yml` workflow via
