@@ -141,3 +141,22 @@ jobs:
 
 Other callers may continue to reference `@main` if they prefer to track the
 latest workflows without explicit pinning.
+
+## Development
+
+This repository uses [lefthook](https://github.com/evilmartians/lefthook) to run CI checks locally before committing and pushing.
+
+### Setup
+
+```sh
+lefthook install
+```
+
+### Hooks
+
+**pre-commit** and **pre-push** both run:
+
+- `actionlint` — lints all GitHub Actions workflow files under `.github/workflows/`.
+- `typos` — checks the repository for spelling mistakes.
+
+Note: CI runs the full suite on every pull request. The local hooks mirror those checks so issues are caught early.
