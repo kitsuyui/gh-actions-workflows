@@ -40,7 +40,16 @@ on:
         default: "info"
     secrets:
       RENOVATE_TOKEN:
-        description: GitHub PAT or installation token used by Renovate.
+        description: >-
+          GitHub PAT or installation token used by Renovate.
+          Minimum required scopes for a classic PAT: `repo` (private repositories)
+          or `public_repo` (public repositories only).
+          For a fine-grained PAT: `Contents: Read and write`,
+          `Pull requests: Read and write`, `Metadata: Read-only`.
+          For a GitHub App installation token: the app needs the same permissions
+          as a fine-grained PAT listed above.
+          Note: because `inputs.repository` allows specifying any target repository,
+          scope the token to only the repositories Renovate should manage.
         required: true
 
 permissions:
