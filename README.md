@@ -86,6 +86,23 @@ base branch and may need full history to resolve a merge-base. Repositories with
 large histories can set a bounded depth to reduce checkout cost, but too shallow
 a checkout can make gh-counter fail to find the pull request base commit.
 
+Callers can also override the artifact name, path, and retention period:
+
+```yaml
+jobs:
+  gh-counter:
+    uses: kitsuyui/gh-actions-workflows/.github/workflows/gh-counter.yml@main
+    with:
+      artifact-name: my-gh-counter-output
+      artifact-path: .gh-counter
+      retention-days: 7
+```
+
+`artifact-name` sets the name used when uploading the artifact (default:
+`gh-counter-output`). `artifact-path` sets the directory that gh-counter writes
+to (default: `.gh-counter`). `retention-days` controls how long GitHub keeps the
+uploaded artifact (default: `30`).
+
 Private Renovate callers should provide a repository secret named
 `RENOVATE_TOKEN`. The workflow processes the caller repository by default:
 
