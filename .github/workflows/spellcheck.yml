@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
       - name: Check spelling
-        uses: crate-ci/typos@26e1ab0f398ee2139416a695ba2f7497533e6909 # master
+        uses: crate-ci/typos@2a44449ff3410624a0fa2ea073c670e1c9236a40 # master
         with:
           files: ${{ inputs.files }}
           config: ${{ inputs.config }}
