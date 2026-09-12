@@ -2,7 +2,21 @@
 
 Reusable GitHub Actions workflows for kitsuyui repositories.
 
-## Workflows
+## Repository CI
+
+`.github/workflows/` also contains two workflows that are not reusable and
+are not meant to be referenced by callers via `uses:`:
+
+- `ci.yml`: this repository's own CI. It runs on `pull_request` and `push`
+  to `main`, and dogfoods the reusable workflows below at the current
+  commit.
+- `release.yml`: a `workflow_dispatch` utility that tags and publishes a
+  GitHub release for this repository. See [Releases](#releases).
+
+## Reusable workflows
+
+The following workflows are published for other repositories to call via
+`jobs.<job_id>.uses:`.
 
 - `spellcheck.yml`: runs `crate-ci/typos` against the caller repository.
 - `happy-commit.yml`: runs `kitsuyui/happy-commit`. The `happy` job uses
