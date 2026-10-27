@@ -4,3 +4,7 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    ignore:
+      # Avoid self-referential reusable-workflow update loops.
+      - dependency-name: "kitsuyui/gh-actions-workflows"
+      - dependency-name: "kitsuyui/gh-actions-workflows/*"
